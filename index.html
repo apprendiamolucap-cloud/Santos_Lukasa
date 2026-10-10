@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il Comparatore - Strumento di Misura | Presentazione Scolastica</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50:'#eff6ff',100:'#dbeafe',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',900:'#1e3a8a' },
+                        accent: { DEFAULT:'#f59e0b', hover:'#d97706' },
+                        darkbg: '#0f172a',
+                        cardbg: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Inter & FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        .glass-nav {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+        .creator-card:hover .creator-glow { opacity: 1; }
+        .creator-glow { opacity: 0; transition: opacity .4s ease; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between custom-scrollbar bg-slate-900 text-slate-100">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-40 glass-nav border-b border-slate-700/60 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo / Title -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                    <div class="bg-gradient-to-br from-blue-500 to-indigo-600 p-2.5 rounded-xl shadow-lg shadow-blue-500/20">
+                        <i class="fa-solid fa-gauge-high text-xl text-white"></i>
+                    </div>
+                    <div>
+                        <span class="font-bold text-lg tracking-wide bg-gradient-to-r from-blue-400 to-amber-400 bg-clip-text text-transparent">
+                            IL COMPARATORE
+                        </span>
+                        <span class="text-xs text-slate-400 block -mt-1 font-medium">Metrologia & Meccanica</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Buttons -->
+                <nav class="hidden md:flex items-center space-x-2">
+                    <button id="nav-home" onclick="navigateTo('home')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800">
+                        <i class="fa-solid fa-house mr-1.5 text-blue-400"></i> <span data-i18n="nav_home">Panoramica</span>
+                    </button>
+                    <button id="nav-types" onclick="navigateTo('types')" class="nav-btn px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/30 border border-blue-400/30 flex items-center gap-2">
+                        <i class="fa-solid fa-microscope text-amber-300"></i>
+                        <span data-i18n="nav_types">Tipi di Comparatore</span>
+                        <span class="bg-amber-400 text-slate-950 text-xs px-1.5 py-0.5 rounded-full font-bold" data-i18n="nav_types_badge">3 Modelli</span>
+                    </button>
+                    <button id="nav-physics" onclick="navigateTo('physics')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800">
+                        <i class="fa-solid fa-gears mr-1.5 text-amber-400"></i> <span data-i18n="nav_physics">Funzionamento</span>
+                    </button>
+                    <button id="nav-assistant" onclick="navigateTo('assistant')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800">
+                        <i class="fa-solid fa-robot mr-1.5 text-emerald-400"></i> <span data-i18n="nav_assistant">Q&A Assistente</span>
+                    </button>
+                    <button id="nav-creators" onclick="navigateTo('creators')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800">
+                        <i class="fa-solid fa-users mr-1.5 text-pink-400"></i> <span data-i18n="nav_creators">Creatori</span>
+                    </button>
+                    <div class="ml-2 flex items-center bg-slate-900 border border-slate-700 rounded-lg overflow-hidden">
+                        <button id="lang-it-btn" onclick="setLanguage('it')" class="px-2.5 py-1.5 text-xs font-bold transition-all bg-blue-600 text-white">IT</button>
+                        <button id="lang-en-btn" onclick="setLanguage('en')" class="px-2.5 py-1.5 text-xs font-bold transition-all text-slate-300 hover:bg-slate-800">EN</button>
+                    </div>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-slate-300 hover:text-white p-2 rounded-lg focus:outline-none bg-slate-800 border border-slate-700">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-800/95 border-b border-slate-700 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="navigateTo('home'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-lg text-slate-200 hover:bg-slate-700 font-medium">
+                <i class="fa-solid fa-house mr-2 text-blue-400"></i> <span data-i18n="nav_home">Panoramica</span>
+            </button>
+            <button onclick="navigateTo('types'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-lg bg-blue-600 text-white font-semibold flex items-center justify-between">
+                <span><i class="fa-solid fa-microscope mr-2 text-amber-300"></i> <span data-i18n="nav_types">Tipi di Comparatore</span></span>
+                <span class="bg-amber-400 text-slate-950 text-xs px-2 py-0.5 rounded-full font-bold" data-i18n="nav_types_badge">3 Modelli</span>
+            </button>
+            <button onclick="navigateTo('physics'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-lg text-slate-200 hover:bg-slate-700 font-medium">
+                <i class="fa-solid fa-gears mr-2 text-amber-400"></i> <span data-i18n="nav_physics_full">Funzionamento & Precisione</span>
+            </button>
+            <button onclick="navigateTo('assistant'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-lg text-slate-200 hover:bg-slate-700 font-medium">
+                <i class="fa-solid fa-robot mr-2 text-emerald-400"></i> <span data-i18n="nav_assistant">Assistente Virtuale</span>
+            </button>
+            <button onclick="navigateTo('creators'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-lg text-slate-200 hover:bg-slate-700 font-medium">
+                <i class="fa-solid fa-users mr-2 text-pink-400"></i> <span data-i18n="nav_creators">Creatori del Sito</span>
+            </button>
+            <div class="flex items-center gap-2 pt-2 border-t border-slate-700">
+                <span class="text-xs text-slate-400 font-semibold" data-i18n="lang_label">Lingua:</span>
+                <button id="lang-it-btn-mobile" onclick="setLanguage('it')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white">IT</button>
+                <button id="lang-en-btn-mobile" onclick="setLanguage('en')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-300 hover:bg-slate-700 bg-slate-900 border border-slate-700">EN</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- SECTION 1: HOME / PANORAMICA -->
+        <section id="page-home" class="page-section space-y-8 transition-opacity duration-300">
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-800 via-slate-800/90 to-blue-950 border border-slate-700 p-8 md:p-12 shadow-2xl">
+                <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-3xl space-y-4">
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                        <i class="fa-solid fa-graduation-cap"></i> <span data-i18n="hero_badge">Presentazione Didattica Meccanica</span>
+                    </span>
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white" data-i18n="hero_title">
+                        Il Comparatore Meccanico e Digitale
+                    </h1>
+                    <p class="text-slate-300 text-base md:text-lg leading-relaxed" data-i18n="hero_desc">
+                        Lo strumento fondamentale in metrologia industriale per il controllo di tolleranza, planarità, eccentricità e concentricità di pezzi meccanici tramite misurazione differenziale.
+                    </p>
+                    <div class="pt-4 flex flex-wrap gap-4">
+                        <button onclick="navigateTo('types')" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-lg shadow-blue-600/30 transition-all flex items-center gap-2">
+                            <span data-i18n="hero_btn1">Esplora i 3 Tipi di Comparatore</span>
+                            <i class="fa-solid fa-arrow-right text-amber-300"></i>
+                        </button>
+                        <button onclick="navigateTo('physics')" class="px-6 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold border border-slate-600 transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-play text-blue-400"></i>
+                            <span data-i18n="hero_btn2">Prova il Simulatore</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-slate-800/90 border border-slate-700/80 rounded-2xl p-6 shadow-xl hover:border-blue-500/50 transition-all group">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2" data-i18n="card1_title">Come è Fatto</h3>
+                    <ul class="text-sm text-slate-300 space-y-2">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-400 text-xs mt-1"></i><span data-i18n="card1_li1"><strong>Cassa circolare:</strong> Simile ad un orologio da tasca.</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-400 text-xs mt-1"></i><span data-i18n="card1_li2"><strong>Tastatore (Asta):</strong> Punta mobile che rileva le micro-variazioni.</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-400 text-xs mt-1"></i><span data-i18n="card1_li3"><strong>Doppio Quadrante:</strong> 100 tacche (centesimi) + contagiri millimetrico.</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-blue-400 text-xs mt-1"></i><span data-i18n="card1_li4"><strong>Ghiera Orientabile:</strong> Per azzerare la lancetta in qualsiasi punto.</span></li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-800/90 border border-slate-700/80 rounded-2xl p-6 shadow-xl hover:border-amber-500/50 transition-all group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2" data-i18n="card2_title">A Cosa Serve</h3>
+                    <ul class="text-sm text-slate-300 space-y-2">
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-amber-400 text-xs mt-1"></i><span data-i18n="card2_li1">Verifica di <strong>Planarità</strong> su superfici piatte (piani di riscontro).</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-amber-400 text-xs mt-1"></i><span data-i18n="card2_li2">Verifica di <strong>Concentricità</strong> ed eccentricità su pezzi al tornio.</span></li>
+                        <li class="flex items-start gap-2"><i class="fa-solid fa-circle-check text-amber-400 text-xs mt-1"></i><span data-i18n="card2_li3">Misura per <strong>confronto</strong> rispetto a un blocco di azzeramento (blocchetti piano-paralleli).</span></li>
+                    </ul>
+                </div>
+
+                <div class="bg-slate-800/90 border border-slate-700/80 rounded-2xl p-6 shadow-xl hover:border-emerald-500/50 transition-all group">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-gears"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2" data-i18n="card3_title">Come Funziona</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed mb-3" data-i18n="card3_desc">
+                        Trasforma il movimento rettilineo dell'asta tastatrice in movimento rotatorio delle lancette.
+                    </p>
+                    <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-700 text-xs text-emerald-300 font-mono">
+                        Asta spinta → Cremagliera → Treno Ingranaggi → Lancetta
+                    </div>
+                </div>
+
+                <div class="bg-slate-800/90 border border-slate-700/80 rounded-2xl p-6 shadow-xl hover:border-purple-500/50 transition-all group">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-ruler-combined"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2" data-i18n="card4_title">Precisione</h3>
+                    <ul class="text-sm text-slate-300 space-y-2">
+                        <li class="flex items-start gap-2">
+                            <span class="bg-blue-500/20 text-blue-300 font-mono text-xs px-2 py-0.5 rounded font-bold">0.01 mm</span>
+                            <span data-i18n="card4_li1">Sui modelli centesimali standard (1 tacca = 1 centesimo).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="bg-purple-500/20 text-purple-300 font-mono text-xs px-2 py-0.5 rounded font-bold">0.001 mm</span>
+                            <span data-i18n="card4_li2">Sui modelli millesimali digitali per laboratorio.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-blue-900/40 via-slate-800 to-indigo-900/40 rounded-2xl border border-blue-500/30 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
+                <div class="space-y-2 text-center md:text-left">
+                    <h3 class="text-2xl font-bold text-white" data-i18n="cta_title">Vuoi vedere i 3 principali modelli nel dettaglio?</h3>
+                    <p class="text-slate-300 text-sm" data-i18n="cta_desc">Scopri il comparatore digitale portatile, quello centesimale a quadrante con base magnetica e quello digitale da laboratorio.</p>
+                </div>
+                <button onclick="navigateTo('types')" class="shrink-0 px-8 py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl shadow-lg shadow-amber-500/20 transition-all transform hover:-translate-y-0.5">
+                    <span data-i18n="cta_btn">Vai ai Tipi di Comparatore</span> <i class="fa-solid fa-circle-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </section>
+        
+        <!-- SECTION 2: TIPI DI COMPARATORE (DETTAGLIATO) -->
+        <section id="page-types" class="page-section hidden space-y-8 transition-opacity duration-300">
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30 uppercase tracking-wider" data-i18n="types_badge">
+                    Sezione Principale
+                </span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-white" data-i18n="types_title">I Principali Tipi di Comparatore</h2>
+                <p class="text-slate-300 text-sm md:text-base" data-i18n="types_desc">
+                    In officina e nei laboratori metrologici vengono utilizzati modelli differenti a seconda del grado di precisione necessario e dell'ambiente di lavoro.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                <!-- MODELLO 1 -->
+                <div class="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden shadow-2xl flex flex-col hover:border-blue-500 transition-all group">
+                    <div class="relative bg-slate-950 h-64 overflow-hidden flex items-center justify-center p-4">
+                        <img src="https://www.samatools.it/wp-content/uploads/2024/10/SA029M-12TS.jpg" 
+                             alt="Comparatore Digitale Portatile" 
+                             onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e293b/3b82f6?text=Comparatore+Digitale+Portatile';"
+                             class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                             onclick="openLightbox(this.src, 'Comparatore Digitale Portatile')">
+                        <div class="absolute top-3 right-3 bg-blue-600/90 text-white text-xs font-bold px-2.5 py-1 rounded-md backdrop-blur">
+                            Digitale / Portatile
+                        </div>
+                        <button onclick="openLightbox('https://www.samatools.it/wp-content/uploads/2024/10/SA029M-12TS.jpg', 'Comparatore Digitale Portatile')" class="absolute bottom-3 right-3 bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg border border-slate-600 flex items-center gap-1.5 backdrop-blur">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i> <span data-i18n="zoom">Ingrandisci</span>
+                        </button>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="bg-blue-500/10 text-blue-400 text-xs font-semibold px-2 py-0.5 rounded border border-blue-500/20">0,01 mm / 0,001 mm</span>
+                                <span class="bg-slate-700 text-slate-300 text-xs font-semibold px-2 py-0.5 rounded" data-i18n="use_workshop">Uso in Officina</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2" data-i18n="model1_title">Comparatore Digitale Portatile</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed" data-i18n="model1_desc">
+                                Strumento compatto, ideale per verifiche rapide direttamente a bordo macchina e in officina. Dotato di display LCD ad alta leggibilità che permette l'azzeramento rapido (Zero SET) in qualsiasi posizione della corsa.
+                            </p>
+                        </div>
+                        <div class="space-y-2 border-t border-slate-700/80 pt-4">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="key_features">Caratteristiche Chiave:</h4>
+                            <ul class="text-xs text-slate-300 space-y-1.5">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i><span data-i18n="model1_li1">Conversione immediata tra mm ed pollici (inch).</span></li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i><span data-i18n="model1_li2">Uscita dati SPC per collegamento a PC e software SPC.</span></li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-400"></i><span data-i18n="model1_li3">Riduzione al minimo degli errori umani di parallellismo/lettura.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODELLO 2 -->
+                <div class="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden shadow-2xl flex flex-col hover:border-amber-500 transition-all group">
+                    <div class="relative bg-slate-950 h-64 overflow-hidden flex items-center justify-center p-4">
+                        <img src="https://www.grecoshop.it/shop/449-large_default/comparatore-centesimale-a-quadrante-con-base-magnetica-5135-2.jpg" 
+                             alt="Comparatore Centesimale a Quadrante" 
+                             onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e293b/f59e0b?text=Comparatore+con+Base+Magnetica';"
+                             class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                             onclick="openLightbox(this.src, 'Comparatore Centesimale con Base Magnetica')">
+                        <div class="absolute top-3 right-3 bg-amber-600/90 text-white text-xs font-bold px-2.5 py-1 rounded-md backdrop-blur">
+                            Meccanico / Base Magnetica
+                        </div>
+                        <button onclick="openLightbox('https://www.grecoshop.it/shop/449-large_default/comparatore-centesimale-a-quadrante-con-base-magnetica-5135-2.jpg', 'Comparatore Centesimale con Base Magnetica')" class="absolute bottom-3 right-3 bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg border border-slate-600 flex items-center gap-1.5 backdrop-blur">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i> <span data-i18n="zoom">Ingrandisci</span>
+                        </button>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="bg-amber-500/10 text-amber-400 text-xs font-semibold px-2 py-0.5 rounded border border-amber-500/20">0,01 mm (Centesimale)</span>
+                                <span class="bg-slate-700 text-slate-300 text-xs font-semibold px-2 py-0.5 rounded" data-i18n="use_lathe">Tornio & Fresa</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2" data-i18n="model2_title">Comparatore Centesimale a Quadrante</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed" data-i18n="model2_desc">
+                                Il modello meccanico classico più diffuso nelle lavorazioni meccaniche. Spesso fornito con base magnetica con snodo orientabile On/Off per fissarlo in modo estremamente rigido sui basamenti metallici delle macchine utensili.
+                            </p>
+                        </div>
+                        <div class="space-y-2 border-t border-slate-700/80 pt-4">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="key_features">Caratteristiche Chiave:</h4>
+                            <ul class="text-xs text-slate-300 space-y-1.5">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i><span data-i18n="model2_li1">Ghiera ruotabile per l'azzeramento manuale della lancetta.</span></li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i><span data-i18n="model2_li2">Doppio quadrante: scala centesimale + contagiri dei millimetri interi.</span></li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-400"></i><span data-i18n="model2_li3">Base magnetica commutabile (magnete permanente attivabile con leva).</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODELLO 3 -->
+                <div class="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden shadow-2xl flex flex-col hover:border-emerald-500 transition-all group">
+                    <div class="relative bg-slate-950 h-64 overflow-hidden flex items-center justify-center p-4">
+                        <img src="https://i.ebayimg.com/00/s/MTYwMFgxMzg1/z/iikAAOSwPe1UJZDN/$_1.JPG?set_id=880000500F" 
+                             alt="Comparatore Digitale da Laboratorio" 
+                             onerror="this.onerror=null; this.src='https://placehold.co/600x400/1e293b/10b981?text=Comparatore+da+Laboratorio';"
+                             class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+                             onclick="openLightbox(this.src, 'Comparatore Digitale da Laboratorio su Stativo')">
+                        <div class="absolute top-3 right-3 bg-emerald-600/90 text-white text-xs font-bold px-2.5 py-1 rounded-md backdrop-blur">
+                            Laboratorio / Stativo
+                        </div>
+                        <button onclick="openLightbox('https://i.ebayimg.com/00/s/MTYwMFgxMzg1/z/iikAAOSwPe1UJZDN/$_1.JPG?set_id=880000500F', 'Comparatore Digitale da Laboratorio su Stativo')" class="absolute bottom-3 right-3 bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg border border-slate-600 flex items-center gap-1.5 backdrop-blur">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i> <span data-i18n="zoom">Ingrandisci</span>
+                        </button>
+                    </div>
+                    <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="bg-emerald-500/10 text-emerald-400 text-xs font-semibold px-2 py-0.5 rounded border border-emerald-500/20">0,001 mm (Millesimale)</span>
+                                <span class="bg-slate-700 text-slate-300 text-xs font-semibold px-2 py-0.5 rounded" data-i18n="use_lab">Sala Metrologica</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2" data-i18n="model3_title">Comparatore Digitale da Laboratorio</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed" data-i18n="model3_desc">
+                                Strumento ad altissima precisione montato su uno stativo/supporto pesante di misura in ghisa o granito. Ideale per le sale metrologiche di controllo qualità e per la calibrazione di campioni priva di vibrazioni.
+                            </p>
+                        </div>
+                        <div class="space-y-2 border-t border-slate-700/80 pt-4">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider" data-i18n="key_features">Caratteristiche Chiave:</h4>
+                            <ul class="text-xs text-slate-300 space-y-1.5">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i><span data-i18n="model3_li1">Sensibilità millesimale (0,001 mm = 1 micron).</span></li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i><span data-i18n="model3_li2">Stativo ultra-rigido che annulla le inflessioni e le vibrazioni micro-metriche.</span></li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i><span data-i18n="model3_li3">Integrazione con sistemi automatici di rilevamento tolleranze MAX/MIN/TOL.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="bg-slate-800 rounded-2xl border border-slate-700 p-6 shadow-xl overflow-x-auto">
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-table-list text-amber-400"></i> <span data-i18n="table_title">Confronto Sintetico tra i Modelli</span>
+                </h3>
+                <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+                    <thead class="bg-slate-900/80 text-slate-200 text-xs uppercase font-bold border-b border-slate-700">
+                        <tr>
+                            <th class="p-3">Caratteristica</th>
+                            <th class="p-3 text-blue-400">Digitale Portatile</th>
+                            <th class="p-3 text-amber-400">Centesimale a Quadrante</th>
+                            <th class="p-3 text-emerald-400">Digitale da Laboratorio</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-700/50">
+                        <tr>
+                            <td class="p-3 font-semibold text-white">Risoluzione tipica</td>
+                            <td class="p-3">0,01 mm / 0,001 mm</td>
+                            <td class="p-3">0,01 mm (1 centesimo)</td>
+                            <td class="p-3 font-bold text-emerald-400">0,001 mm (1 micron)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-semibold text-white">Supporto / Fissaggio</td>
+                            <td class="p-3">Manuale / Supporti leggeri</td>
+                            <td class="p-3">Base magnetica con snodo</td>
+                            <td class="p-3">Stativo pesante in ghisa/granito</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-semibold text-white">Lettura Dato</td>
+                            <td class="p-3">Display LCD immediato</td>
+                            <td class="p-3">Analogica su lancette</td>
+                            <td class="p-3">Display LCD con interfaccia PC</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 font-semibold text-white">Ambiente Ideale</td>
+                            <td class="p-3">Controllo rapido sul campo</td>
+                            <td class="p-3">Officina meccanica (Tornio/Fresa)</td>
+                            <td class="p-3">Sala metrologica condizionata</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 3: COME FUNZIONA & SIMULATORE -->
+        <section id="page-physics" class="page-section hidden space-y-8 transition-opacity duration-300">
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase tracking-wider">
+                    Meccanica Interna & Simulazione
+                </span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-white">Come Funziona & Simulatore</h2>
+                <p class="text-slate-300 text-sm md:text-base">
+                    Prova a muovere l'asta del tastatore con lo slider per vedere in tempo reale la rotazione della lancetta grande (centesimi) e della lancetta piccola (millimetri interi)!
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div class="lg:col-span-7 bg-slate-800 border border-slate-700 rounded-3xl p-6 shadow-2xl space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-700 pb-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></span>
+                            <h3 class="font-bold text-white text-lg">Simulatore Interattivo di Lettura</h3>
+                        </div>
+                        <button onclick="resetGaugeSim()" class="px-3 py-1 bg-slate-700 hover:bg-slate-600 text-xs font-bold rounded-lg text-slate-200 transition-all border border-slate-600">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Azzera
+                        </button>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-center space-y-6">
+                        <div class="relative w-64 h-64 sm:w-72 sm:h-72">
+                            <svg viewBox="0 0 300 300" class="w-full h-full drop-shadow-2xl">
+                                <circle cx="150" cy="150" r="140" fill="#1e293b" stroke="#475569" stroke-width="8"/>
+                                <circle cx="150" cy="150" r="132" fill="#0f172a" stroke="#3b82f6" stroke-width="3"/>
+                                <g id="dial-ticks" stroke="#64748b" stroke-width="1.5"></g>
+                                <g id="dial-numbers" font-family="sans-serif" font-size="10" fill="#94a3b8" text-anchor="middle" font-weight="bold"></g>
+                                <g transform="translate(150, 95)">
+                                    <circle cx="0" cy="0" r="28" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+                                    <text x="0" y="-16" font-size="7" fill="#cbd5e1" text-anchor="middle" font-weight="bold">mm</text>
+                                    <line id="small-needle" x1="0" y1="0" x2="0" y2="-20" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+                                    <circle cx="0" cy="0" r="3" fill="#f59e0b"/>
+                                </g>
+                                <g transform="translate(150, 150)">
+                                    <line id="main-needle" x1="0" y1="18" x2="0" y2="-110" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+                                    <circle cx="0" cy="0" r="8" fill="#ef4444" stroke="#ffffff" stroke-width="2"/>
+                                </g>
+                                <circle cx="150" cy="150" r="130" fill="url(#glass-grad)" opacity="0.15" pointer-events="none"/>
+                                <defs>
+                                    <linearGradient id="glass-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#ffffff"/>
+                                        <stop offset="100%" stop-color="#000000"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="absolute left-1/2 -translate-x-1/2 -bottom-12 w-6 bg-slate-600 rounded-b-sm border border-slate-500 flex flex-col items-center justify-end" style="height: 60px;">
+                                <div id="plunger-tip" class="w-4 bg-amber-400 rounded-b-full transition-all duration-75 shadow-md" style="height: 20px;"></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 w-full pt-6">
+                            <div class="bg-slate-900 border border-slate-700 p-3 rounded-xl text-center">
+                                <span class="text-xs text-slate-400 font-semibold block uppercase">Spostamento Asta</span>
+                                <span id="display-mm" class="text-2xl font-mono font-bold text-amber-400">0.00 mm</span>
+                            </div>
+                            <div class="bg-slate-900 border border-slate-700 p-3 rounded-xl text-center">
+                                <span class="text-xs text-slate-400 font-semibold block uppercase">Tacche Rilevate</span>
+                                <span id="display-ticks" class="text-2xl font-mono font-bold text-blue-400">0 / 100</span>
+                            </div>
+                        </div>
+
+                        <div class="w-full space-y-2 bg-slate-900/60 p-4 rounded-xl border border-slate-700">
+                            <div class="flex justify-between items-center text-xs font-bold text-slate-300">
+                                <span><i class="fa-solid fa-hand-pointer text-amber-400 mr-1"></i> Trascina per muovere il Tastatore:</span>
+                                <span class="text-slate-400">Corsa: 0.00 - 10.00 mm</span>
+                            </div>
+                            <input type="range" id="plunger-slider" min="0" max="1000" value="0" step="1" 
+                                   oninput="updateGaugeFromSlider(this.value)"
+                                   class="w-full h-3 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-400">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl space-y-4">
+                        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-diagram-project text-blue-400"></i> Spiegazione del Movimento
+                        </h3>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Ogni volta che l'asta mobile (tastatore) rientra di <strong>1,00 mm</strong>, la lancetta principale compie <strong>1 giro completo a 360°</strong> sul quadrante grande.
+                        </p>
+                        <div class="space-y-3 pt-2">
+                            <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-700/80">
+                                <div class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">1. Quadrante Centesimale</div>
+                                <p class="text-xs text-slate-300">Ha 100 tacche. Ogni tacca equivale esattamente a <strong class="text-white font-mono">0,01 mm</strong> (1 centesimo di millimetro).</p>
+                            </div>
+                            <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-700/80">
+                                <div class="text-xs font-bold text-blue-400 uppercase tracking-wider mb-1">2. Contagiri Millimetrico</div>
+                                <p class="text-xs text-slate-300">Il quadrante più piccolo conta i millimetri interi (da 0 a 10 mm) ogni volta che la lancetta grande fa un giro completo.</p>
+                            </div>
+                            <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-700/80">
+                                <div class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">3. Ghiera ed Azzeramento</div>
+                                <p class="text-xs text-slate-300">Facendo ruotare la cassa esterna (ghiera), si allinea lo ZERO della scala alla lancetta prima di iniziare il controllo del pezzo.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-slate-800 to-blue-950 border border-blue-500/30 rounded-2xl p-6 shadow-xl text-xs space-y-2">
+                        <div class="font-bold text-slate-200 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-calculator text-amber-400"></i> Calcolo della Lettura:
+                        </div>
+                        <div class="bg-slate-900/90 p-3 rounded-lg font-mono text-slate-300 border border-slate-700">
+                            Misura Totale = (Giri Quadrante Piccolo × 1 mm) + (Tacche Lancetta Grande × 0.01 mm)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: ASSISTENTE VIRTUALE -->
+        <section id="page-assistant" class="page-section hidden space-y-8 transition-opacity duration-300">
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider">
+                    Supporto Interattivo
+                </span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-white">Assistente Virtuale della Presentazione</h2>
+                <p class="text-slate-300 text-sm md:text-base">
+                    Fai clic sulle domande predefinite per ricevere subito spiegazioni chiare da mostrare ai compagni o ai docenti durante la risposta!
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                <div class="md:col-span-5 space-y-3">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider px-1">Domande Frequenti Predefinite</h3>
+                    <button onclick="triggerAssistantQuestion(1)" class="w-full text-left p-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500/50 text-slate-200 text-sm transition-all flex items-center justify-between group">
+                        <span class="font-medium">A cosa serve il comparatore?</span>
+                        <i class="fa-solid fa-chevron-right text-xs text-slate-500 group-hover:text-emerald-400"></i>
+                    </button>
+                    <button onclick="triggerAssistantQuestion(2)" class="w-full text-left p-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500/50 text-slate-200 text-sm transition-all flex items-center justify-between group">
+                        <span class="font-medium">Qual è la differenza tra i vari tipi?</span>
+                        <i class="fa-solid fa-chevron-right text-xs text-slate-500 group-hover:text-emerald-400"></i>
+                    </button>
+                    <button onclick="triggerAssistantQuestion(3)" class="w-full text-left p-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500/50 text-slate-200 text-sm transition-all flex items-center justify-between group">
+                        <span class="font-medium">Come funziona con base magnetica?</span>
+                        <i class="fa-solid fa-chevron-right text-xs text-slate-500 group-hover:text-emerald-400"></i>
+                    </button>
+                    <button onclick="triggerAssistantQuestion(4)" class="w-full text-left p-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500/50 text-slate-200 text-sm transition-all flex items-center justify-between group">
+                        <span class="font-medium">Perché usare quello da laboratorio?</span>
+                        <i class="fa-solid fa-chevron-right text-xs text-slate-500 group-hover:text-emerald-400"></i>
+                    </button>
+                    <button onclick="triggerAssistantQuestion(5)" class="w-full text-left p-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-500/50 text-slate-200 text-sm transition-all flex items-center justify-between group">
+                        <span class="font-medium">Come si azzera lo strumento?</span>
+                        <i class="fa-solid fa-chevron-right text-xs text-slate-500 group-hover:text-emerald-400"></i>
+                    </button>
+                </div>
+
+                <div class="md:col-span-7 bg-slate-800 border border-slate-700 rounded-2xl h-[480px] flex flex-col overflow-hidden shadow-2xl">
+                    <div class="bg-slate-900 p-4 border-b border-slate-700 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-bot text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Assistente Didattico Metrologia</h4>
+                                <span class="text-xs text-emerald-400 flex items-center gap-1">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Pronto a rispondere
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="full-chat-body" class="flex-grow p-4 overflow-y-auto space-y-4 custom-scrollbar">
+                        <div class="bg-slate-700/60 border border-slate-600/60 rounded-xl p-3.5 text-sm text-slate-200 max-w-[85%]">
+                            👋 Benvenuto! Seleziona una delle domande a sinistra per visualizzare la spiegazione dettagliata.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: CREATORI DEL SITO -->
+        <section id="page-creators" class="page-section hidden space-y-8 transition-opacity duration-300">
+            <div class="text-center max-w-3xl mx-auto space-y-3">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-pink-500/20 text-pink-400 border border-pink-500/30 uppercase tracking-wider">
+                    <i class="fa-solid fa-code mr-1"></i> <span data-i18n="creators_badge">Team di Sviluppo</span>
+                </span>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-white" data-i18n="creators_title">I Creatori del Sito</h2>
+                <p class="text-slate-300 text-sm md:text-base" data-i18n="creators_desc">
+                    Questo progetto è stato realizzato con passione da due studenti. Ecco chi ha dato vita a questa presentazione interattiva sul comparatore.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+
+                <!-- Creator 1: Luca Podeschi -->
+                <div class="creator-card relative bg-slate-800 rounded-3xl border border-slate-700 p-8 shadow-2xl overflow-hidden hover:border-blue-500 transition-all group">
+                    <div class="creator-glow absolute -top-20 -right-20 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10 flex flex-col items-center text-center space-y-4">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full blur-md opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                            <img src="https://i.pinimg.com/736x/db/c7/bf/dbc7bf308d8cf0612fe3f11307ec0c03.jpg" 
+                                 alt="Luca Podeschi" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/200x200/1e293b/3b82f6?text=LP';"
+                                 class="relative w-32 h-32 rounded-full object-cover border-4 border-slate-900 shadow-xl group-hover:scale-105 transition-transform duration-300">
+                            <span class="absolute bottom-1 right-1 w-6 h-6 bg-emerald-500 border-4 border-slate-900 rounded-full"></span>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-extrabold text-white">Luca Podeschi</h3>
+                            <p class="text-sm text-blue-400 font-semibold mt-1">
+                                <i class="fa-solid fa-at mr-1"></i>Luka.Pode
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2 pt-2">
+                            <span class="px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-semibold rounded-full">
+                                <i class="fa-solid fa-code mr-1"></i> <span data-i18n="role_dev">Sviluppatore</span>
+                            </span>
+                            <span class="px-3 py-1 bg-slate-700 border border-slate-600 text-slate-300 text-xs font-semibold rounded-full">
+                                <i class="fa-solid fa-palette mr-1"></i> <span data-i18n="role_design">Design</span>
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-400 italic pt-2" data-i18n="creator1_bio">
+                            "Ho curato la struttura e le animazioni del sito."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Creator 2: Giovanni Conti -->
+                <div class="creator-card relative bg-slate-800 rounded-3xl border border-slate-700 p-8 shadow-2xl overflow-hidden hover:border-amber-500 transition-all group">
+                    <div class="creator-glow absolute -top-20 -left-20 w-64 h-64 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10 flex flex-col items-center text-center space-y-4">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full blur-md opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                            <img src="https://i.imgur.com/UHxRF2K.png" 
+                                 alt="Giovanni Conti" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/200x200/1e293b/f59e0b?text=GC';"
+                                 class="relative w-32 h-32 rounded-full object-cover border-4 border-slate-900 shadow-xl group-hover:scale-105 transition-transform duration-300">
+                            <span class="absolute bottom-1 right-1 w-6 h-6 bg-emerald-500 border-4 border-slate-900 rounded-full"></span>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-extrabold text-white">Giovanni Conti</h3>
+                            <p class="text-sm text-amber-400 font-semibold mt-1">
+                                <i class="fa-solid fa-at mr-1"></i>giovi_conts
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2 pt-2">
+                            <span class="px-3 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-semibold rounded-full">
+                                <i class="fa-solid fa-code mr-1"></i> <span data-i18n="role_dev">Sviluppatore</span>
+                            </span>
+                            <span class="px-3 py-1 bg-slate-700 border border-slate-600 text-slate-300 text-xs font-semibold rounded-full">
+                                <i class="fa-solid fa-book mr-1"></i> <span data-i18n="role_content">Contenuti</span>
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-400 italic pt-2" data-i18n="creator2_bio">
+                            "Ho curato i contenuti tecnici e le spiegazioni."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center pt-4">
+                <button onclick="navigateTo('home')" class="px-6 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold border border-slate-600 transition-all inline-flex items-center gap-2">
+                    <i class="fa-solid fa-house text-blue-400"></i> <span data-i18n="back_home">Torna alla Panoramica</span>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FLOATING CHAT WIDGET -->
+    <div id="chat-widget-container" class="fixed bottom-6 right-6 z-50">
+        <button id="chat-widget-btn" onclick="toggleFloatingChat()" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white p-4 rounded-full shadow-2xl border border-blue-400/40 flex items-center gap-3 transition-transform hover:scale-105 active:scale-95 group">
+            <i class="fa-solid fa-comments text-xl text-amber-300"></i>
+            <span class="font-bold text-sm hidden sm:inline pr-1">Chiedi all'Assistente</span>
+            <span class="w-3 h-3 rounded-full bg-amber-400 border-2 border-slate-900"></span>
+        </button>
+
+        <div id="floating-chat-window" class="hidden absolute bottom-16 right-0 w-80 sm:w-96 h-[480px] bg-slate-800 border border-slate-700 rounded-2xl shadow-2xl flex-col overflow-hidden">
+            <div class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-robot text-emerald-400"></i>
+                    <span class="font-bold text-sm text-white">Assistente Comparatore</span>
+                </div>
+                <button onclick="toggleFloatingChat()" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="widget-chat-body" class="flex-grow p-4 overflow-y-auto space-y-3 custom-scrollbar text-xs">
+                <div class="bg-slate-700/80 p-3 rounded-xl text-slate-200">
+                    Seleziona un quesito rapido qui sotto per avere la risposta:
+                </div>
+            </div>
+            <div class="p-3 bg-slate-900 border-t border-slate-700 space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar">
+                <button onclick="triggerAssistantQuestion(1)" class="w-full text-left px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded border border-slate-700 truncate">• A cosa serve il comparatore?</button>
+                <button onclick="triggerAssistantQuestion(2)" class="w-full text-left px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded border border-slate-700 truncate">• Differenze tra i tipi di comparatore?</button>
+                <button onclick="triggerAssistantQuestion(3)" class="w-full text-left px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded border border-slate-700 truncate">• Come funziona la base magnetica?</button>
+                <button onclick="triggerAssistantQuestion(4)" class="w-full text-left px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded border border-slate-700 truncate">• Perché il modello da laboratorio?</button>
+                <button onclick="triggerAssistantQuestion(5)" class="w-full text-left px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded border border-slate-700 truncate">• Come si azzera la lancetta o lo schermo?</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMAGE LIGHTBOX MODAL -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md hidden items-center justify-center p-4" onclick="closeLightbox()">
+        <div class="relative max-w-4xl w-full bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden shadow-2xl p-4 flex flex-col items-center" onclick="event.stopPropagation()">
+            <button onclick="closeLightbox()" class="absolute top-3 right-3 bg-slate-800 text-slate-300 hover:text-white p-2 rounded-full border border-slate-700 z-10">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <img id="lightbox-img" src="" alt="Dettaglio Immagine" class="max-h-[75vh] w-auto object-contain rounded-lg">
+            <p id="lightbox-title" class="text-slate-200 font-bold mt-3 text-center text-sm sm:text-base"></p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                <span class="font-bold text-slate-300" data-i18n="footer_label">Presentazione Scolastica:</span> <span data-i18n="footer_title">Il Comparatore Meccanico e Digitale</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <span data-i18n="footer_made">Realizzato per Laboratorio di Metrologia & Meccanica</span>
+                <span class="text-slate-700">|</span>
+                <button onclick="navigateTo('creators')" class="text-pink-400 hover:text-pink-300 font-semibold transition-colors">
+                    <i class="fa-solid fa-users mr-1"></i> <span data-i18n="footer_creators">Creatori</span>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        // ============ TRADUZIONI IT / EN ============
+        const translations = {
+            it: {
+                nav_home: "Panoramica", nav_types: "Tipi di Comparatore", nav_types_badge: "3 Modelli",
+                nav_physics: "Funzionamento", nav_physics_full: "Funzionamento & Precisione",
+                nav_assistant: "Q&A Assistente", nav_creators: "Creatori", lang_label: "Lingua:",
+                hero_badge: "Presentazione Didattica Meccanica",
+                hero_title: "Il Comparatore Meccanico e Digitale",
+                hero_desc: "Lo strumento fondamentale in metrologia industriale per il controllo di tolleranza, planarità, eccentricità e concentricità di pezzi meccanici tramite misurazione differenziale.",
+                hero_btn1: "Esplora i 3 Tipi di Comparatore", hero_btn2: "Prova il Simulatore",
+                card1_title: "Come è Fatto",
+                card1_li1: "<strong>Cassa circolare:</strong> Simile ad un orologio da tasca.",
+                card1_li2: "<strong>Tastatore (Asta):</strong> Punta mobile che rileva le micro-variazioni.",
+                card1_li3: "<strong>Doppio Quadrante:</strong> 100 tacche (centesimi) + contagiri millimetrico.",
+                card1_li4: "<strong>Ghiera Orientabile:</strong> Per azzerare la lancetta in qualsiasi punto.",
+                card2_title: "A Cosa Serve",
+                card2_li1: "Verifica di <strong>Planarità</strong> su superfici piatte (piani di riscontro).",
+                card2_li2: "Verifica di <strong>Concentricità</strong> ed eccentricità su pezzi al tornio.",
+                card2_li3: "Misura per <strong>confronto</strong> rispetto a un blocco di azzeramento (blocchetti piano-paralleli).",
+                card3_title: "Come Funziona",
+                card3_desc: "Trasforma il movimento rettilineo dell'asta tastatrice in movimento rotatorio delle lancette.",
+                card4_title: "Precisione",
+                card4_li1: "Sui modelli centesimali standard (1 tacca = 1 centesimo).",
+                card4_li2: "Sui modelli millesimali digitali per laboratorio.",
+                cta_title: "Vuoi vedere i 3 principali modelli nel dettaglio?",
+                cta_desc: "Scopri il comparatore digitale portatile, quello centesimale a quadrante con base magnetica e quello digitale da laboratorio.",
+                cta_btn: "Vai ai Tipi di Comparatore",
+                types_badge: "Sezione Principale", types_title: "I Principali Tipi di Comparatore",
+                types_desc: "In officina e nei laboratori metrologici vengono utilizzati modelli differenti a seconda del grado di precisione necessario e dell'ambiente di lavoro.",
+                use_workshop: "Uso in Officina", use_lathe: "Tornio & Fresa", use_lab: "Sala Metrologica",
+                zoom: "Ingrandisci", key_features: "Caratteristiche Chiave:",
+                model1_title: "Comparatore Digitale Portatile",
+                model1_desc: "Strumento compatto, ideale per verifiche rapide direttamente a bordo macchina e in officina. Dotato di display LCD ad alta leggibilità che permette l'azzeramento rapido (Zero SET) in qualsiasi posizione della corsa.",
+                model1_li1: "Conversione immediata tra mm ed pollici (inch).",
+                model1_li2: "Uscita dati SPC per collegamento a PC e software SPC.",
+                model1_li3: "Riduzione al minimo degli errori umani di parallellismo/lettura.",
+                model2_title: "Comparatore Centesimale a Quadrante",
+                model2_desc: "Il modello meccanico classico più diffuso nelle lavorazioni meccaniche. Spesso fornito con base magnetica con snodo orientabile On/Off per fissarlo in modo estremamente rigido sui basamenti metallici delle macchine utensili.",
+                model2_li1: "Ghiera ruotabile per l'azzeramento manuale della lancetta.",
+                model2_li2: "Doppio quadrante: scala centesimale + contagiri dei millimetri interi.",
+                model2_li3: "Base magnetica commutabile (magnete permanente attivabile con leva).",
+                model3_title: "Comparatore Digitale da Laboratorio",
+                model3_desc: "Strumento ad altissima precisione montato su uno stativo/supporto pesante di misura in ghisa o granito. Ideale per le sale metrologiche di controllo qualità e per la calibrazione di campioni priva di vibrazioni.",
+                model3_li1: "Sensibilità millesimale (0,001 mm = 1 micron).",
+                model3_li2: "Stativo ultra-rigido che annulla le inflessioni e le vibrazioni micro-metriche.",
+                model3_li3: "Integrazione con sistemi automatici di rilevamento tolleranze MAX/MIN/TOL.",
+                table_title: "Confronto Sintetico tra i Modelli",
+                creators_badge: "Team di Sviluppo", creators_title: "I Creatori del Sito",
+                creators_desc: "Questo progetto è stato realizzato con passione da due studenti. Ecco chi ha dato vita a questa presentazione interattiva sul comparatore.",
+                role_dev: "Sviluppatore", role_design: "Design", role_content: "Contenuti",
+                creator1_bio: "\"Ho curato la struttura e le animazioni del sito.\"",
+                creator2_bio: "\"Ho curato i contenuti tecnici e le spiegazioni.\"",
+                back_home: "Torna alla Panoramica",
+                footer_label: "Presentazione Scolastica:", footer_title: "Il Comparatore Meccanico e Digitale",
+                footer_made: "Realizzato per Laboratorio di Metrologia & Meccanica", footer_creators: "Creatori"
+            },
+            en: {
+                nav_home: "Overview", nav_types: "Comparator Types", nav_types_badge: "3 Models",
+                nav_physics: "Operation", nav_physics_full: "Operation & Precision",
+                nav_assistant: "Q&A Assistant", nav_creators: "Creators", lang_label: "Language:",
+                hero_badge: "Mechanical Didactic Presentation",
+                hero_title: "The Mechanical and Digital Comparator",
+                hero_desc: "The fundamental tool in industrial metrology for checking tolerance, flatness, eccentricity and concentricity of mechanical parts through differential measurement.",
+                hero_btn1: "Explore the 3 Comparator Types", hero_btn2: "Try the Simulator",
+                card1_title: "How It's Made",
+                card1_li1: "<strong>Round case:</strong> Similar to a pocket watch.",
+                card1_li2: "<strong>Probe (Rod):</strong> Moving tip that detects micro-variations.",
+                card1_li3: "<strong>Double Dial:</strong> 100 ticks (hundredths) + millimeter counter.",
+                card1_li4: "<strong>Rotating Bezel:</strong> To zero the needle at any point.",
+                card2_title: "What It's For",
+                card2_li1: "Flatness check on flat surfaces (surface plates).",
+                card2_li2: "Concentricity and eccentricity check on lathe parts.",
+                card2_li3: "Comparison measurement against a zeroing block (gauge blocks).",
+                card3_title: "How It Works",
+                card3_desc: "It transforms the linear motion of the probe rod into rotary motion of the needles.",
+                card4_title: "Precision",
+                card4_li1: "On standard centesimal models (1 tick = 1 hundredth).",
+                card4_li2: "On millesimal digital lab models.",
+                cta_title: "Want to see the 3 main models in detail?",
+                cta_desc: "Discover the portable digital comparator, the centesimal dial one with magnetic base, and the digital lab one.",
+                cta_btn: "Go to Comparator Types",
+                types_badge: "Main Section", types_title: "The Main Comparator Types",
+                types_desc: "In workshops and metrology labs, different models are used depending on the required precision and working environment.",
+                use_workshop: "Workshop Use", use_lathe: "Lathe & Milling", use_lab: "Metrology Lab",
+                zoom: "Zoom In", key_features: "Key Features:",
+                model1_title: "Portable Digital Comparator",
+                model1_desc: "Compact tool, ideal for quick checks directly on the machine and in the workshop. Equipped with a high-readability LCD display that allows quick zeroing (Zero SET) at any position of the stroke.",
+                model1_li1: "Instant conversion between mm and inches.",
+                model1_li2: "SPC data output for PC and SPC software connection.",
+                model1_li3: "Minimizes human errors of parallelism/reading.",
+                model2_title: "Centesimal Dial Comparator",
+                model2_desc: "The classic mechanical model most widespread in mechanical machining. Often supplied with a magnetic base with adjustable On/Off joint to fix it very rigidly on the metal bases of machine tools.",
+                model2_li1: "Rotating bezel for manual zeroing of the needle.",
+                model2_li2: "Double dial: centesimal scale + whole millimeter counter.",
+                model2_li3: "Switchable magnetic base (permanent magnet activated by lever).",
+                model3_title: "Digital Lab Comparator",
+                model3_desc: "Very high precision tool mounted on a heavy measuring stand/support in cast iron or granite. Ideal for metrology quality control rooms and for sample calibration free of vibrations.",
+                model3_li1: "Millesimal sensitivity (0.001 mm = 1 micron).",
+                model3_li2: "Ultra-rigid stand that cancels deflections and micro-metric vibrations.",
+                model3_li3: "Integration with automatic tolerance detection systems MAX/MIN/TOL.",
+                table_title: "Summary Comparison of the Models",
+                creators_badge: "Development Team", creators_title: "The Site Creators",
+                creators_desc: "This project was made with passion by two students. Here's who brought this interactive presentation on the comparator to life.",
+                role_dev: "Developer", role_design: "Design", role_content: "Content",
+                creator1_bio: "\"I took care of the site structure and animations.\"",
+                creator2_bio: "\"I took care of the technical content and explanations.\"",
+                back_home: "Back to Overview",
+                footer_label: "School Presentation:", footer_title: "The Mechanical and Digital Comparator",
+                footer_made: "Made for Metrology & Mechanics Lab", footer_creators: "Creators"
+            }
+        };
+
+        let currentLang = 'it';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            const itBtn = document.getElementById('lang-it-btn');
+            const enBtn = document.getElementById('lang-en-btn');
+            const itBtnM = document.getElementById('lang-it-btn-mobile');
+            const enBtnM = document.getElementById('lang-en-btn-mobile');
+
+            if (lang === 'it') {
+                if (itBtn) itBtn.className = "px-2.5 py-1.5 text-xs font-bold transition-all bg-blue-600 text-white";
+                if (enBtn) enBtn.className = "px-2.5 py-1.5 text-xs font-bold transition-all text-slate-300 hover:bg-slate-800";
+                if (itBtnM) itBtnM.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white";
+                if (enBtnM) enBtnM.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-300 hover:bg-slate-700 bg-slate-900 border border-slate-700";
+            } else {
+                if (itBtn) itBtn.className = "px-2.5 py-1.5 text-xs font-bold transition-all text-slate-300 hover:bg-slate-800";
+                if (enBtn) enBtn.className = "px-2.5 py-1.5 text-xs font-bold transition-all bg-blue-600 text-white";
+                if (itBtnM) itBtnM.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-300 hover:bg-slate-700 bg-slate-900 border border-slate-700";
+                if (enBtnM) enBtnM.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white";
+            }
+        }
+
+        // ============ NAVIGAZIONE ============
+        function navigateTo(sectionId) {
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(p => p.classList.add('hidden'));
+
+            const targetPage = document.getElementById(`page-${sectionId}`);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.classList.remove('bg-slate-800', 'text-white');
+            });
+
+            const activeBtn = document.getElementById(`nav-${sectionId}`);
+            if (activeBtn && sectionId !== 'types') {
+                activeBtn.classList.add('bg-slate-800', 'text-white');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function openLightbox(src, title) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox-title').textContent = title;
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function toggleFloatingChat() {
+            const chatWin = document.getElementById('floating-chat-window');
+            chatWin.classList.toggle('hidden');
+            chatWin.classList.toggle('flex');
+        }
+
+        const qaData = {
+            1: { q: "A cosa serve il comparatore?", a: "Il comparatore serve a misurare gli scostamenti di forma e posizione di un pezzo meccanico. Viene impiegato per verificare la planarità di superfici piane, la concentricità/eccentricità di alberi al tornio e la corrispondenza rispetto a una misura campione." },
+            2: { q: "Qual è la differenza tra i vari tipi di comparatore?", a: "1) Il Digitale Portatile è leggero e veloce per controlli generici. 2) Il Centesimale Meccanico con Base Magnetica si fissa saldamente sulle macchine utensili (es. tornio o fresa). 3) Il Digitale da Laboratorio è su uno stativo ultra-rigido ed ha risoluzione millesimale (0,001 mm) per la sala metrologica." },
+            3: { q: "Come funziona il comparatore con base magnetica?", a: "La base contiene un magnete permanente orientabile tramite una levetta On/Off. In posizione ON, il flusso magnetico aziona la forza di bloccaggio sulla struttura in acciaio del tornio, garantendo la rigidità necessaria affinché la lancetta non vibri durante il controllo." },
+            4: { q: "Perché usare il modello da laboratorio millesimale?", a: "Nei laboratori di controllo qualità servono tolleranze strettissime. Un comparatore millesimale (0,001 mm = 1 micron) montato su uno stativo pesante elimina le flessioni meccaniche ed evita errori di misurazione dovuti alle vibrazioni dell'ambiente." },
+            5: { q: "Come si azzera la lancetta o lo schermo?", a: "Nel modello meccanico analogico si ruota manualmente la ghiera esterna del quadrante finché la tacca dello ZERO si allinea con la lancetta. Nel modello digitale si posiziona il tastatore e si preme semplicemente il pulsante 'ZERO / SET'." }
+        };
+
+        function triggerAssistantQuestion(id) {
+            const data = qaData[id];
+            if (!data) return;
+            const fullBody = document.getElementById('full-chat-body');
+            appendChatMessage(fullBody, data.q, data.a);
+            const widgetBody = document.getElementById('widget-chat-body');
+            appendChatMessage(widgetBody, data.q, data.a);
+        }
+
+        function appendChatMessage(container, question, answer) {
+            const userDiv = document.createElement('div');
+            userDiv.className = "bg-blue-600/90 text-white p-3 rounded-xl max-w-[85%] ml-auto text-xs sm:text-sm shadow font-medium";
+            userDiv.textContent = question;
+            container.appendChild(userDiv);
+
+            setTimeout(() => {
+                const botDiv = document.createElement('div');
+                botDiv.className = "bg-slate-700 border border-slate-600 text-slate-100 p-3.5 rounded-xl max-w-[85%] text-xs sm:text-sm space-y-1 shadow";
+                botDiv.innerHTML = `<span class="font-bold text-amber-400 block text-xs mb-1"><i class="fa-solid fa-robot mr-1"></i> Risposta:</span>${answer}`;
+                container.appendChild(botDiv);
+                container.scrollTop = container.scrollHeight;
+            }, 200);
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function initGaugeGraphic() {
+            const ticksGroup = document.getElementById('dial-ticks');
+            const numbersGroup = document.getElementById('dial-numbers');
+            if (!ticksGroup || !numbersGroup) return;
+
+            for (let i = 0; i < 100; i++) {
+                const angle = (i * 3.6) * (Math.PI / 180);
+                const isMajor = i % 10 === 0;
+                const isMedium = i % 5 === 0 && !isMajor;
+                const rOuter = 128;
+                const rInner = isMajor ? 112 : (isMedium ? 118 : 122);
+                const x1 = 150 + rOuter * Math.sin(angle);
+                const y1 = 150 - rOuter * Math.cos(angle);
+                const x2 = 150 + rInner * Math.sin(angle);
+                const y2 = 150 - rInner * Math.cos(angle);
+
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', x1);
+                line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2);
+                line.setAttribute('y2', y2);
+                line.setAttribute('stroke', isMajor ? '#f8fafc' : '#64748b');
+                line.setAttribute('stroke-width', isMajor ? '2' : '1');
+                ticksGroup.appendChild(line);
+
+                if (isMajor) {
+                    const rText = 100;
+                    const tx = 150 + rText * Math.sin(angle);
+                    const ty = 150 - rText * Math.cos(angle) + 4;
+                    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    text.setAttribute('x', tx);
+                    text.setAttribute('y', ty);
+                    text.textContent = i;
+                    numbersGroup.appendChild(text);
+                }
+            }
+        }
+
+        function updateGaugeFromSlider(val) {
+            const mm = val / 100;
+            document.getElementById('display-mm').textContent = `${mm.toFixed(2)} mm`;
+            const totalTicks = Math.round(mm * 100);
+            const currentLapTicks = totalTicks % 100;
+            document.getElementById('display-ticks').textContent = `${currentLapTicks} / 100`;
+
+            const mainDegrees = mm * 360;
+            const mainNeedle = document.getElementById('main-needle');
+            if (mainNeedle) mainNeedle.setAttribute('transform', `rotate(${mainDegrees})`);
+
+            const smallDegrees = mm * 36;
+            const smallNeedle = document.getElementById('small-needle');
+            if (smallNeedle) smallNeedle.setAttribute('transform', `rotate(${smallDegrees})`);
+
+            const plungerTip = document.getElementById('plunger-tip');
+            if (plungerTip) {
+                const heightPx = 20 + (mm * 3);
+                plungerTip.style.height = `${heightPx}px`;
+            }
+        }
+
+        function resetGaugeSim() {
+            const slider = document.getElementById('plunger-slider');
+            if (slider) {
+                slider.value = 0;
+                updateGaugeFromSlider(0);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initGaugeGraphic();
+            updateGaugeFromSlider(0);
+        });
+    </script>
+</body>
+</html>
